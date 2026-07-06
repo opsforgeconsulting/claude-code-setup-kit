@@ -1,0 +1,26 @@
+{
+  "_comment": "A sane allowlist of read-only / routine commands so Claude Code stops asking permission for them. Add your own as you notice repeated prompts. Keep anything destructive OUT of here.",
+  "permissions": {
+    "allow": [
+      "Bash(npm install *)",
+      "Bash(npm ci)",
+      "Bash(npm run *)",
+      "Bash(npx tsc)",
+      "Bash(npx tsc *)",
+      "Bash(npx eslint *)",
+      "Bash(npx playwright *)",
+      "Bash(node *)",
+      "Bash(corepack pnpm *)",
+      "Bash(pnpm *)",
+      "Bash(git status*)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git show*)",
+      "Bash(git branch*)",
+      "Bash(git add *)",
+      "Bash(curl -s http://localhost:*)",
+      "Bash(curl -s http://127.0.0.1:*)",
+      "Bash(curl -s -o /dev/null *)"
+    ]
+  }
+}

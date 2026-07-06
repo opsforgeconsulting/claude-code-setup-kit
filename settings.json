@@ -1,0 +1,64 @@
+{
+  "_comment": "Sanitized Claude Code config. NO secrets. The auto-review hook reads OPENAI_API_KEY from the environment; if unset it silently no-ops. Add MCP servers that need credentials (e.g. Supabase) yourself, and keep their tokens in env vars, never inline.",
+
+  "model": "opus[1m]",
+  "effortLevel": "xhigh",
+
+  "statusLine": {
+    "type": "command",
+    "command": "ccusage statusline",
+    "padding": 0
+  },
+
+  "agentPushNotifEnabled": true,
+  "skipWorkflowUsageWarning": true,
+
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python ~/.claude/hooks/review_hook.py",
+            "timeout": 60
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python ~/.claude/hooks/precompact_backup.py",
+            "timeout": 20
+          }
+        ]
+      }
+    ]
+  },
+
+  "enabledPlugins": {
+    "vercel@claude-plugins-official": true
+  },
+
+  "mcpServers": {
+    "codex": {
+      "command": "codex",
+      "args": ["mcp-server"]
+    },
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp@latest"]
+    },
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest"]
+    },
+    "basic-memory": {
+      "command": "uvx",
+      "args": ["basic-memory", "mcp"]
+    }
+  }
+}
