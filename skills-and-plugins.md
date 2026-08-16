@@ -1,35 +1,37 @@
 # Skills & Plugins
 
-Skills and plugins aren't copied as files — they're installed from public
-sources so they stay updated. Here's the curated set and how to get each.
+## Skills — already bundled ✅
+
+`bootstrap.ps1` installs **37 skills** into `~/.claude/skills/`. Nothing to clone,
+nothing to hunt down. After bootstrap, start a session and ask *"what skills do
+you have?"* to see them listed.
+
+Provenance and licensing for every bundled skill: see `ATTRIBUTION.md`.
+
+What you get, by group:
+
+| Group | Skills |
+|---|---|
+| **Engineering discipline** | brainstorming · writing-plans · executing-plans · subagent-driven-development · test-driven-development · systematic-debugging · requesting-code-review · receiving-code-review · verification-before-completion · dispatching-parallel-agents · using-git-worktrees · finishing-a-development-branch · using-superpowers · writing-skills · loop-contract · skill-stocktake |
+| **UI / UX** | ui-ux-pro-max (styles, palettes, font pairings) · motion-design · ux-designer-skill · web-design-guidelines · mobile-app-ui-design · composition-patterns · react-best-practices |
+| **21st.dev** | 21st-ui-build · 21st-ui-explore · 21st-ui-review · 21st-ai · 21st-cli-use · 21st-registry · 21st-design-sync |
+| **Obsidian / writing** | obsidian-markdown · obsidian-bases · obsidian-cli · json-canvas · defuddle (web → clean markdown) |
+| **Tooling** | ast-grep (structural code search) · playwright-skill (browser automation) |
+
+Skills update independently of this kit — re-clone from the sources in
+`ATTRIBUTION.md` when you want the newest versions.
 
 ## Plugins (via the marketplace)
 
-Claude Code ships with a marketplace command. Add the official marketplace, then
-enable plugins.
+Run inside a Claude Code session:
 
 ```
-# inside a Claude Code session:
 /plugin marketplace add anthropics/claude-plugins-official
 /plugin install vercel@claude-plugins-official      # deploy + Vercel/Next.js skills
 ```
 
-The kit's `settings.json` already lists `vercel@claude-plugins-official` under
-`enabledPlugins`, so once installed it activates automatically.
-
-## Skill collections (clone into ~/.claude/skills)
-
-These are folders of skills. Clone each repo's skills into `~/.claude/skills/`
-(one subfolder per skill). Check each repo's README for the exact layout.
-
-| Set | What you get | Source |
-|---|---|---|
-| **Obra "Superpowers"** | Engineering-discipline skills: brainstorming, writing-plans, executing-plans, test-driven-development, systematic-debugging, requesting/receiving-code-review, verification-before-completion, dispatching-parallel-agents, using-git-worktrees | search GitHub for "obra superpowers claude skills" |
-| **kepano / obsidian-skills** | Obsidian authoring: obsidian-markdown, obsidian-bases, json-canvas, defuddle (clean web→markdown), obsidian-cli | `github.com/kepano/obsidian-skills` |
-| **UI/UX set** | ui-ux-pro-max (styles/palettes/font-pairings), motion-design, ux-designer-skill, web-design-guidelines, mobile-app-ui-design, composition-patterns, react-best-practices | bundle these from the design-skill repos you prefer |
-
-After cloning, restart Claude Code and run `/status` or check that the skills
-appear in the available-skills list.
+`settings.json` already lists `vercel@claude-plugins-official` under
+`enabledPlugins`, so it activates as soon as it's installed.
 
 ## CLI tools (installed by bootstrap.ps1)
 
@@ -56,3 +58,11 @@ appear in the available-skills list.
 
 To add a credentialed server later (e.g. Supabase), add it under `mcpServers`
 and pass the token via an env var — never paste it into the file.
+
+## Hooks (installed to ~/.claude/hooks)
+
+| Hook | What it does |
+|---|---|
+| `review_hook.py` | PostToolUse on Write/Edit — automatic second-opinion review of every diff. Needs `OPENAI_API_KEY`; silently no-ops without it. Model via `REVIEW_MODEL`. |
+| `precompact_backup.py` | PreCompact — snapshots the session before context compaction. |
+| `heredoc_guard.py` | Blocks bash heredocs carrying non-ASCII on Windows (they silently corrupt em-dashes and eat backslashes). Windows-specific; drop it on macOS/Linux. |

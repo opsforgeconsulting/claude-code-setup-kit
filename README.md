@@ -26,20 +26,30 @@ claude-code-setup-kit/
 ├── agents/
 │   ├── premium-ui.md          ← build/redesign UI to a funded-SaaS standard (ui-ux → motion → playwright)
 │   ├── security-review.md     ← adversarial pre-ship security + compliance gate
-│   └── supabase-migrator.md   ← safe Drizzle + Supabase Postgres migrations (knows the MySQL→PG traps)
+│   ├── supabase-migrator.md   ← safe Drizzle + Supabase Postgres migrations (knows the MySQL→PG traps)
+│   └── silent-failure-hunter.md ← finds swallowed errors and fallbacks that hide real breakage
 ├── commands/
 │   ├── ship.md                ← /ship  — build, verify, deploy with a live-verify loop
 │   ├── verify.md              ← /verify — prove a change works end-to-end without deploying
-│   └── newapp.md              ← /newapp — scaffold a demo-mode-first Next.js app
+│   ├── newapp.md              ← /newapp — scaffold a demo-mode-first Next.js app
+│   └── learn-eval.md          ← /learn-eval — extract a lesson, quality-gate it, save it
+├── skills/                    ← 37 skills, installed for you (zip build only)
 ├── memory/
 │   └── MEMORY.md              ← empty memory index to grow into
-└── skills-and-plugins.md      ← public sources + one-line installs for the skill/plugin set
+├── ATTRIBUTION.md             ← who wrote the bundled skills + licenses
+└── skills-and-plugins.md      ← what's bundled, plus plugins/CLI/MCP reference
 ```
 
 The `agents/` and `commands/` are **generalized** versions of a working
 builder's toolkit — all brand/client/deploy-scope specifics stripped, the
 transferable craft kept. After bootstrap, type `/ship`, `/verify`, or `/newapp`
 in a session, and the agents are available to the Agent tool by name.
+
+**Skills are bundled** in the zip distribution (37 of them — engineering
+discipline, UI/UX, 21st.dev, Obsidian, tooling) and installed straight into
+`~/.claude/skills/` by the bootstrap. They're third-party work: see
+`ATTRIBUTION.md` for authors and licenses. The git repo omits `skills/` on
+purpose — pull those from their upstream sources rather than a fork.
 
 ## Quick start (Windows / PowerShell)
 

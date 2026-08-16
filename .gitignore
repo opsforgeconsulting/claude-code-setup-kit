@@ -1,3 +1,9 @@
 __pycache__/
 *.py[cod]
 *.bak-*
+
+# Bundled skills are third-party work - shipped in the private zip only,
+# not republished here. See ATTRIBUTION.md for sources.
+skills/
+node_modules/
+.temp-execution-*
