@@ -1,8 +1,8 @@
 {
-  "_comment": "Sanitized Claude Code config. NO secrets. The auto-review hook reads OPENAI_API_KEY from the environment; if unset it silently no-ops. Add MCP servers that need credentials (e.g. Supabase) yourself, and keep their tokens in env vars, never inline.",
+  "_comment": "Sanitized Claude Code config. NO secrets. Hook paths use $HOME so the same file works on any machine (bootstrap copies this into ~/.claude). The auto-review hook reads OPENAI_API_KEY from the environment and no-ops without it. Add MCP servers that need credentials (e.g. Supabase) yourself and keep their tokens in env vars, never inline. If your account has no access to the Fable model, set \"model\" to \"opus[1m]\".",
 
-  "model": "opus[1m]",
-  "effortLevel": "xhigh",
+  "model": "fable[1m]",
+  "effortLevel": "high",
 
   "statusLine": {
     "type": "command",
@@ -14,14 +14,78 @@
   "skipWorkflowUsageWarning": true,
 
   "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$HOME/.claude/hooks/candidates_notice.js\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node --no-warnings \"$HOME/.claude/hooks/recall_hook.js\"",
+            "timeout": 15
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"$HOME/.claude/hooks/heredoc_guard.py\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
     "PostToolUse": [
       {
         "matcher": "Write|Edit",
         "hooks": [
           {
             "type": "command",
-            "command": "python ~/.claude/hooks/review_hook.py",
+            "command": "python \"$HOME/.claude/hooks/review_hook.py\"",
             "timeout": 60
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$HOME/.claude/hooks/context_monitor.js\"",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "Skill|Agent",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$HOME/.claude/hooks/harness_telemetry.js\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$HOME/.claude/hooks/learn_loop.js\"",
+            "timeout": 5
           }
         ]
       }
@@ -31,7 +95,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python ~/.claude/hooks/precompact_backup.py",
+            "command": "python \"$HOME/.claude/hooks/precompact_backup.py\"",
             "timeout": 20
           }
         ]

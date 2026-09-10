@@ -1,9 +1,12 @@
 """PreToolUse guard: bash heredocs + non-ASCII content corrupt on Windows.
 
-Bit us twice on 7/31 (em-dashes -> mojibake, backslashes eaten writing JS).
+Git Bash on Windows turns em-dashes and curly quotes inside a heredoc into
+mojibake and eats backslashes (bit a working setup twice writing JS this way).
 Mechanism over discipline: block the combination and point at the Write tool.
 Fail-open on ANY error -- this hook must never break normal Bash usage.
-Stdout/stderr ASCII only (house rule).
+Stdout/stderr ASCII only (hook output is cp1252 on Windows).
+
+Windows-specific. On macOS/Linux you can drop this hook from settings.json.
 """
 import json
 import re

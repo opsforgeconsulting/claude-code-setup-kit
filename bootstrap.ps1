@@ -8,20 +8,29 @@
   upgrade in place. Existing ~/.claude config files are backed up (.bak-<stamp>)
   before being overwritten - nothing is destroyed silently.
 
+  Keep this file pure ASCII with a UTF-8 BOM: Windows PowerShell 5.1 reads .ps1
+  as ANSI without a BOM and non-ASCII characters break the parser.
+
 .PARAMETER WhatIf
   Show every action without performing it.
 
 .PARAMETER SkipTools
   Only copy config; don't install any software.
 
+.PARAMETER Full
+  Also install the desktop apps the full setup uses: Obsidian, Granola, Google
+  Chrome, PostgreSQL (psql), AutoHotkey, Python 3.11+. Skipped by default.
+
 .EXAMPLE
   ./bootstrap.ps1 -WhatIf
   ./bootstrap.ps1
+  ./bootstrap.ps1 -Full
 #>
 [CmdletBinding()]
 param(
   [switch]$WhatIf,
-  [switch]$SkipTools
+  [switch]$SkipTools,
+  [switch]$Full
 )
 
 $ErrorActionPreference = 'Stop'
@@ -36,10 +45,13 @@ function Warn($msg)   { Write-Host "    !   $msg" -ForegroundColor Yellow }
 function Have($cmd) { [bool](Get-Command $cmd -ErrorAction SilentlyContinue) }
 
 function Winget-Install($id, $probe) {
-  if (Have $probe) { Ok "$probe already installed"; return }
+  if ($probe -and (Have $probe)) { Ok "$probe already installed"; return }
   if ($WhatIf) { Info "would: winget install $id"; return }
   Info "winget install $id"
-  winget install --id $id -e --source winget --accept-source-agreements --accept-package-agreements -h | Out-Null
+  try {
+    winget install --id $id -e --source winget --accept-source-agreements --accept-package-agreements -h | Out-Null
+  } catch { Warn "winget install $id failed: $($_.Exception.Message)"; return }
+  if (-not $probe) { Ok "$id installed (or already present)"; return }
   if (Have $probe) { Ok "$probe installed" } else { Warn "$probe not on PATH yet (may need a new shell)" }
 }
 
@@ -62,12 +74,27 @@ if (-not $SkipTools) {
     Warn "winget not found - install 'App Installer' from the Microsoft Store, then re-run. Skipping system tools."
   } else {
     Step "System tools (winget)"
+    Winget-Install 'Git.Git'           'git'
     Winget-Install 'OpenJS.NodeJS.LTS' 'node'
     Winget-Install 'astral-sh.uv'      'uv'
     Winget-Install 'GitHub.cli'        'gh'
     Winget-Install 'sharkdp.fd'        'fd'
     Winget-Install 'sharkdp.bat'       'bat'
     Winget-Install 'dandavison.delta'  'delta'
+    Winget-Install 'BurntSushi.ripgrep.MSVC' 'rg'
+
+    if ($Full) {
+      Step "Desktop apps (-Full)"
+      Winget-Install 'Python.Python.3.11'      'python'
+      Winget-Install 'Google.Chrome'           $null
+      Winget-Install 'Obsidian.Obsidian'       $null
+      Winget-Install 'PostgreSQL.PostgreSQL.18' 'psql'
+      Winget-Install 'AutoHotkey.AutoHotkey'   $null
+      # Granola (meeting notes) - winget id varies by release; try it, fall back to the site.
+      $granola = winget search --id Granola.Granola -e --source winget 2>$null | Select-String 'Granola'
+      if ($granola) { Winget-Install 'Granola.Granola' $null }
+      else { Warn "Granola not found in winget - download it from https://www.granola.ai/download" }
+    }
   }
 
   if (Have npm) {
@@ -78,6 +105,9 @@ if (-not $SkipTools) {
     Npm-Global 'repomix'                   'repomix'  # pack a repo into one LLM-friendly file
     Npm-Global 'ccusage'                   'ccusage'  # the statusline (token/cost usage)
     Npm-Global 'vercel'                    'vercel'   # deploys
+    Npm-Global '@21st-dev/cli'             '21st'     # 21st.dev component search / generation
+    Npm-Global 'defuddle'                  'defuddle' # clean markdown from web pages
+    Npm-Global 'pnpm'                      'pnpm'
     if (-not $WhatIf) { try { corepack enable | Out-Null; Ok 'corepack enabled (pnpm/yarn)' } catch { Warn 'corepack enable failed' } }
   } else {
     Warn "npm not found - open a NEW shell after Node installs, then re-run with -SkipTools to finish."
@@ -88,37 +118,33 @@ if (-not $SkipTools) {
 
 # ---------------------------------------------------------------------------
 Step "Config -> $ClaudeDir"
-if (-not $WhatIf) { New-Item -ItemType Directory -Force -Path $ClaudeDir, (Join-Path $ClaudeDir 'hooks'), (Join-Path $ClaudeDir 'agents'), (Join-Path $ClaudeDir 'commands'), (Join-Path $ClaudeDir 'memory'), (Join-Path $ClaudeDir 'session-logs') | Out-Null }
+$dirs = @('hooks', 'agents', 'commands', 'recall', 'memory') | ForEach-Object { Join-Path $ClaudeDir $_ }
+if (-not $WhatIf) { New-Item -ItemType Directory -Force -Path (@($ClaudeDir) + $dirs) | Out-Null }
 
 $stamp = '{0:yyyyMMdd-HHmmss}' -f (Get-Date)
 $copies = @(
-  @{ src = 'settings.json';                dst = 'settings.json' }
-  @{ src = 'settings.local.json';          dst = 'settings.local.json' }
-  @{ src = 'CLAUDE.md';                    dst = 'CLAUDE.md' }
-  @{ src = 'hooks/review_hook.py';         dst = 'hooks/review_hook.py' }
-  @{ src = 'hooks/precompact_backup.py';   dst = 'hooks/precompact_backup.py' }
-  @{ src = 'hooks/heredoc_guard.py';       dst = 'hooks/heredoc_guard.py' }
-  @{ src = 'agents/premium-ui.md';         dst = 'agents/premium-ui.md' }
-  @{ src = 'agents/security-review.md';    dst = 'agents/security-review.md' }
-  @{ src = 'agents/supabase-migrator.md';  dst = 'agents/supabase-migrator.md' }
-  @{ src = 'agents/silent-failure-hunter.md'; dst = 'agents/silent-failure-hunter.md' }
-  @{ src = 'commands/ship.md';             dst = 'commands/ship.md' }
-  @{ src = 'commands/verify.md';           dst = 'commands/verify.md' }
-  @{ src = 'commands/newapp.md';           dst = 'commands/newapp.md' }
-  @{ src = 'commands/learn-eval.md';       dst = 'commands/learn-eval.md' }
-  @{ src = 'memory/MEMORY.md';             dst = 'memory/MEMORY.md' }
+  'settings.json', 'settings.local.json', 'CLAUDE.md', 'FABLE-OPUS-PACK.md',
+  'hooks/review_hook.py', 'hooks/precompact_backup.py', 'hooks/heredoc_guard.py',
+  'hooks/context_monitor.js', 'hooks/harness_telemetry.js', 'hooks/learn_loop.js',
+  'hooks/learn_prompt.md', 'hooks/recall_hook.js', 'hooks/candidates_notice.js',
+  'recall/recall.mjs', 'recall/transcript-text.mjs',
+  'agents/premium-ui.md', 'agents/security-review.md', 'agents/supabase-migrator.md',
+  'agents/silent-failure-hunter.md', 'agents/vercel-ship.md',
+  'commands/ship.md', 'commands/verify.md', 'commands/newapp.md',
+  'commands/learn-eval.md', 'commands/review-candidates.md',
+  'memory/MEMORY.md'
 )
 
-foreach ($c in $copies) {
-  $from = Join-Path $KitRoot $c.src
-  $to   = Join-Path $ClaudeDir $c.dst
-  if (-not (Test-Path $from)) { Warn "missing in kit: $($c.src)"; continue }
+foreach ($rel in $copies) {
+  $from = Join-Path $KitRoot $rel
+  $to   = Join-Path $ClaudeDir $rel
+  if (-not (Test-Path $from)) { Warn "missing in kit: $rel"; continue }
   if ((Test-Path $to) -and -not $WhatIf) {
     Copy-Item $to "$to.bak-$stamp" -Force
-    Info "backed up existing $($c.dst) -> $($c.dst).bak-$stamp"
+    Info "backed up existing $rel -> $rel.bak-$stamp"
   }
-  if ($WhatIf) { Info "would copy $($c.src) -> $to" }
-  else { Copy-Item $from $to -Force; Ok "copied $($c.dst)" }
+  if ($WhatIf) { Info "would copy $rel -> $to" }
+  else { Copy-Item $from $to -Force; Ok "copied $rel" }
 }
 
 # ---------------------------------------------------------------------------
@@ -156,12 +182,15 @@ Step "Next steps"
 @"
   1) Open a NEW terminal so freshly-installed tools are on PATH.
   2) Authenticate:        claude   ->   /login
+       If your account has no Fable access, set "model" to "opus[1m]" in ~/.claude/settings.json.
   3) (optional) review-hook key:  setx OPENAI_API_KEY "sk-..."   (restart shell)
+     (optional) semantic recall:  setx VOYAGE_API_KEY "pa-..."
   4) Plugins (inside a session):
        /plugin marketplace add anthropics/claude-plugins-official
        /plugin install vercel@claude-plugins-official
   5) Verify in a session: /status   (model, hooks, MCP servers should be listed)
        Skills are already installed - ask "what skills do you have?" to see them.
+  6) Read SETUP-GUIDE.md for the full step-by-step (accounts, connectors, verification).
 "@ | Write-Host -ForegroundColor White
 
 if ($WhatIf) { Warn "WhatIf complete - nothing was changed." } else { Ok "Bootstrap complete." }

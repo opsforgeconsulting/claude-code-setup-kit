@@ -7,3 +7,8 @@ __pycache__/
 skills/
 node_modules/
 .temp-execution-*
+
+# recall index (built on the recipient's machine)
+recall/*.db
+recall/*.db-*
+recall/.seen-sessions.json
