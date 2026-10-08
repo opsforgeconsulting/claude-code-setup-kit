@@ -125,6 +125,7 @@ $stamp = '{0:yyyyMMdd-HHmmss}' -f (Get-Date)
 $copies = @(
   'settings.json', 'settings.local.json', 'CLAUDE.md', 'FABLE-OPUS-PACK.md',
   'hooks/review_hook.py', 'hooks/precompact_backup.py', 'hooks/heredoc_guard.py',
+  'hooks/agent_model_guard.py',
   'hooks/context_monitor.js', 'hooks/harness_telemetry.js', 'hooks/learn_loop.js',
   'hooks/learn_prompt.md', 'hooks/recall_hook.js', 'hooks/candidates_notice.js',
   'recall/recall.mjs', 'recall/transcript-text.mjs',

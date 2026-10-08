@@ -142,6 +142,10 @@ function windowTokens(tokens, model) {
   const envWin = intEnv('CC_CONTEXT_WINDOW_TOKENS', intEnv('CLAUDE_CODE_AUTO_COMPACT_WINDOW', 0));
   if (envWin > 0) return envWin;
   if (typeof model === 'string' && model.includes(LARGE_MARKER)) return LARGE_WINDOW;
+  // Some models run a 1M window with no [1m] marker anywhere (Fable 5.1, Opus 5.5).
+  // Without this a session on them gets false CONTEXT CRITICAL warnings from ~140k
+  // tokens and may stop work because of them. CC_CONTEXT_WINDOW_TOKENS still overrides.
+  if (typeof model === 'string' && /fable-5-1|opus-5-5/.test(model)) return LARGE_WINDOW;
   if (Number.isFinite(tokens) && tokens > STD_WINDOW) return LARGE_WINDOW;
   if (settingsHasLargeMarker()) return LARGE_WINDOW;
   return STD_WINDOW;

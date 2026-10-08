@@ -35,7 +35,8 @@ claude-code-setup-kit/
 |   |-- learn_prompt.md        <- the instructions that headless run follows
 |   |-- candidates_notice.js   <- SessionStart: "N candidate lessons awaiting review"
 |   |-- precompact_backup.py   <- PreCompact: snapshot the transcript before context is compacted
-|   `-- heredoc_guard.py       <- PreToolUse (Bash): blocks non-ASCII heredocs (Windows corruption)
+|   |-- heredoc_guard.py       <- PreToolUse (Bash): blocks non-ASCII heredocs (Windows corruption)
+|   `-- agent_model_guard.py   <- PreToolUse (Agent|Workflow): subagents must name sonnet/opus/haiku, never inherit Fable
 |-- recall/
 |   |-- recall.mjs             <- FTS5 search over memory, journal, session logs, optional vaults
 |   `-- transcript-text.mjs    <- human-readable dump of a session transcript

@@ -83,6 +83,7 @@ claude.ai -> Settings -> Connectors, not in this file. See SETUP-GUIDE.md.
 | `candidates_notice.js` | SessionStart | Reminds you when candidates are waiting. |
 | `precompact_backup.py` | PreCompact | Snapshots the transcript into `memory/session-logs/` (which recall indexes). |
 | `heredoc_guard.py` | PreToolUse (Bash) | Blocks bash heredocs carrying non-ASCII on Windows (they silently corrupt em-dashes and eat backslashes). Windows-specific; drop it on macOS/Linux. |
+| `agent_model_guard.py` | PreToolUse (Agent/Workflow) | Denies any subagent or workflow spawn that would inherit the session model. Every `Agent` call must set `model` to `sonnet` (builders, fan-out), `opus` (judgment, adversarial review) or `haiku` (bulk); `fork` is blocked because it always inherits. Exists because four parallel builders once inherited Fable and burned half a week of usage in an afternoon. |
 
 All hooks derive the memory folder from the session cwd
 (`~/.claude/projects/<cwd-slug>/memory`); set `CC_MEMORY_DIR` to override.

@@ -1,18 +1,14 @@
 {
-  "_comment": "Sanitized Claude Code config. NO secrets. Hook paths use $HOME so the same file works on any machine (bootstrap copies this into ~/.claude). The auto-review hook reads OPENAI_API_KEY from the environment and no-ops without it. Add MCP servers that need credentials (e.g. Supabase) yourself and keep their tokens in env vars, never inline. If your account has no access to the Fable model, set \"model\" to \"opus[1m]\".",
-
-  "model": "fable[1m]",
+  "_comment": "Sanitized Claude Code config. NO secrets. Hook paths use $HOME so the same file works on any machine (bootstrap copies this into ~/.claude). The auto-review hook reads OPENAI_API_KEY from the environment and no-ops without it. Add MCP servers that need credentials (e.g. Supabase) yourself and keep their tokens in env vars, never inline. Model \"fable\" = Fable 5.1 (1M context, no [1m] marker needed; the context monitor knows). If your account has no access to Fable, set \"model\" to \"opus[1m]\".",
+  "model": "fable",
   "effortLevel": "high",
-
   "statusLine": {
     "type": "command",
     "command": "ccusage statusline",
     "padding": 0
   },
-
   "agentPushNotifEnabled": true,
   "skipWorkflowUsageWarning": true,
-
   "hooks": {
     "SessionStart": [
       {
@@ -44,6 +40,17 @@
             "type": "command",
             "command": "python \"$HOME/.claude/hooks/heredoc_guard.py\"",
             "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "Agent|Workflow",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"$HOME/.claude/hooks/agent_model_guard.py\"",
+            "timeout": 10,
+            "statusMessage": "agent model guard"
           }
         ]
       }
@@ -102,27 +109,36 @@
       }
     ]
   },
-
   "enabledPlugins": {
     "vercel@claude-plugins-official": true
   },
-
   "mcpServers": {
     "codex": {
       "command": "codex",
-      "args": ["mcp-server"]
+      "args": [
+        "mcp-server"
+      ]
     },
     "context7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp@latest"]
+      "args": [
+        "-y",
+        "@upstash/context7-mcp@latest"
+      ]
     },
     "playwright": {
       "command": "npx",
-      "args": ["-y", "@playwright/mcp@latest"]
+      "args": [
+        "-y",
+        "@playwright/mcp@latest"
+      ]
     },
     "basic-memory": {
       "command": "uvx",
-      "args": ["basic-memory", "mcp"]
+      "args": [
+        "basic-memory",
+        "mcp"
+      ]
     }
   }
 }
