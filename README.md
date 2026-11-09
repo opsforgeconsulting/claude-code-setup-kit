@@ -94,8 +94,8 @@ claude
 #   edit any .ts file -> you should see an [AUTO-REVIEW] block appear (if OPENAI_API_KEY is set)
 ```
 
-**Model:** `settings.json` is set to `fable[1m]`. If your account does not have
-access to the Fable model, change it to `opus[1m]` - everything else works the same.
+**Model:** `settings.json` is set to `opus` (Opus 5.5, 1M context). Switch a session
+to `fable` (Fable 5.1) with `/model` when the work needs it; it uses roughly 2x the plan.
 
 macOS / Linux: the config files are identical; only `bootstrap.ps1` is
 Windows-specific. Swap `winget`->`brew`/`apt`, `setx`->`export` in your shell

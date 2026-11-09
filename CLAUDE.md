@@ -18,7 +18,7 @@ The eight rules that matter most. Everything below is the detail behind them.
 4. **Colors come from the project - never invented.** Read the project's memory file FIRST; its brand and conventions outrank every default in this guide.
 5. **Premium UI is the floor** (21st.dev / Linear / Vercel). Dark + light with a toggle, glass, motion, radial glows. Never ship generic Tailwind starter UI.
 6. **Compliant by default** - official APIs over scrapers-with-evasion; CAN-SPAM on email; RLS on every table; no regulated data (health, financial) in logs.
-7. **Default stack:** Next.js + TS + Tailwind + shadcn/ui + Supabase (`@supabase/ssr`) + Framer Motion + Anthropic SDK (prompt caching on). Models: `claude-fable-5` (moat features only) / `claude-opus-4-8` / `claude-sonnet-4-6` / `claude-haiku-4-5-20251001`.
+7. **Default stack:** Next.js + TS + Tailwind + shadcn/ui + Supabase (`@supabase/ssr`) + Framer Motion + Anthropic SDK (prompt caching on). Models: `claude-fable-5-1` (moat features only) / `claude-opus-5-5` / `claude-sonnet-5-5` / `claude-haiku-5-5`.
 8. **Deploy** `vercel --prod --yes` (add `--scope <your-team>`); **log** after substantial work (auto-memory + your knowledge base).
 
 ---
@@ -82,10 +82,10 @@ Tiptap - rich text (immediatelyRender: false always)
 
 **Current Claude model IDs (use exactly):**
 ```
-claude-fable-5           - flagship/moat reasoning ONLY (scoring engines, exec agents) - 2x Opus cost; never the blanket default
-claude-opus-4-8          - architectural work, complex reasoning
-claude-sonnet-4-6        - standard builds, most tasks (the in-app workhorse)
-claude-haiku-4-5-20251001 - fast/cheap tasks, evals
+claude-fable-5-1         - flagship/moat reasoning ONLY (scoring engines, exec agents) - ~2x Opus cost; never the blanket default
+claude-opus-5-5          - architectural work, complex reasoning
+claude-sonnet-5-5        - standard builds, most tasks (the in-app workhorse)
+claude-haiku-5-5         - fast/cheap tasks, evals
 ```
 
 **Verified current external model IDs - 2026-06** (default to them for NEW work; don't mass-migrate existing apps - update each only when next touched; always verify live before wiring):
@@ -97,7 +97,7 @@ Groq / Meta:   meta-llama/llama-4-scout-17b-16e-instruct  <- was llama-3.3
 ```
 GPT-5.x gotchas: use `max_completion_tokens` (NOT `max_tokens` -> 400); no custom `temperature`; `gpt-5.5-pro` is Responses-API only (not chat/completions). For ANY model/API/pricing: web-search or hit the live `/models` endpoint and verify before wiring - training cutoff lags reality.
 
-**Fable 5 API gotchas:** adaptive thinking only (`thinking: {type: "adaptive"}`); `thinking: {type: "disabled"}` returns 400 - omit the param instead; no `temperature`/`top_p`/`top_k`; no assistant prefills. Tier per feature (static per-route choice or an env override) - models never switch on their own.
+**Fable 5.x API gotchas (verify against current docs before wiring):** adaptive thinking only (`thinking: {type: "adaptive"}`); `thinking: {type: "disabled"}` returns 400 - omit the param instead; no `temperature`/`top_p`/`top_k`; no assistant prefills. Tier per feature (static per-route choice or an env override) - models never switch on their own.
 
 **Next.js version notes:**
 - Next 15: use `next/font/google` - fetches at build time
@@ -367,7 +367,7 @@ const client = new Anthropic() // reads ANTHROPIC_API_KEY from env
 
 // Prompt caching - always on for system prompts > 1024 tokens
 const response = await client.messages.create({
-  model: 'claude-sonnet-4-6',
+  model: 'claude-sonnet-5-5',
   max_tokens: 1024,
   system: [{ type: 'text', text: systemPrompt,
     cache_control: { type: 'ephemeral' } as any }], // type cast required
@@ -503,8 +503,8 @@ Your memory files (one fact each) are all indexed in `MEMORY.md` (the index inje
 ```
 supabase-js <Database> generic collapses writes to `never` - cast instead
 @anthropic-ai/sdk cache_control requires `as any` type cast
-Model IDs: claude-fable-5 (moat only), claude-opus-4-8, claude-sonnet-4-6, claude-haiku-4-5-20251001
-Fable 5: omit `thinking` to disable (explicit disabled = 400); adaptive thinking only; no temperature/top_p/top_k
+Model IDs: claude-fable-5-1 (moat only), claude-opus-5-5, claude-sonnet-5-5, claude-haiku-5-5
+Fable 5.x: omit `thinking` to disable (explicit disabled = 400); adaptive thinking only; no temperature/top_p/top_k
 tsconfig target: ES2020 always
 Next 14 forms: react-dom useFormState/useFormStatus (not react namespace)
 Next 16 + Turbopack: ssr:false dynamic imports must be in a Client Component

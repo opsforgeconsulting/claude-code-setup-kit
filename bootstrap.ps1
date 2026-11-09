@@ -183,7 +183,7 @@ Step "Next steps"
 @"
   1) Open a NEW terminal so freshly-installed tools are on PATH.
   2) Authenticate:        claude   ->   /login
-       If your account has no Fable access, set "model" to "opus[1m]" in ~/.claude/settings.json.
+       Default model is "opus" (Opus 5.5). Use /model fable for heavy sessions.
   3) (optional) review-hook key:  setx OPENAI_API_KEY "sk-..."   (restart shell)
      (optional) semantic recall:  setx VOYAGE_API_KEY "pa-..."
   4) Plugins (inside a session):

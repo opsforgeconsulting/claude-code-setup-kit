@@ -1,6 +1,6 @@
 {
-  "_comment": "Sanitized Claude Code config. NO secrets. Hook paths use $HOME so the same file works on any machine (bootstrap copies this into ~/.claude). The auto-review hook reads OPENAI_API_KEY from the environment and no-ops without it. Add MCP servers that need credentials (e.g. Supabase) yourself and keep their tokens in env vars, never inline. Model \"fable\" = Fable 5.1 (1M context, no [1m] marker needed; the context monitor knows). If your account has no access to Fable, set \"model\" to \"opus[1m]\".",
-  "model": "fable",
+  "_comment": "Sanitized Claude Code config. NO secrets. Hook paths use $HOME so the same file works on any machine (bootstrap copies this into ~/.claude). The auto-review hook reads OPENAI_API_KEY from the environment and no-ops without it. Add MCP servers that need credentials (e.g. Supabase) yourself and keep their tokens in env vars, never inline. Model \"opus\" = Opus 5.5, the daily driver (1M context, no [1m] marker needed; the context monitor knows). Switch to \"fable\" (Fable 5.1, ~2x the usage) only for a session that needs it.",
+  "model": "opus",
   "effortLevel": "high",
   "statusLine": {
     "type": "command",

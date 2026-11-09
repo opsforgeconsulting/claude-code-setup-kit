@@ -30,7 +30,7 @@ of them where possible so connectors line up later.
 
 | Account | Why | Plan |
 |---|---|---|
-| **Anthropic / Claude** [req] | Claude Code itself | Claude Max (5x or 20x). Fable models need a plan or API access that includes them; if not, the kit falls back to `opus[1m]`. |
+| **Anthropic / Claude** [req] | Claude Code itself | Claude Max (5x or 20x). The kit defaults to `opus` (Opus 5.5); `fable` is opt-in per session. |
 | **GitHub** [req] | code hosting, `gh` CLI | Free is fine |
 | **Vercel** [req] | hosting + deploy CLI | Hobby to start; Pro if deploying client apps. Create a **team** so `--scope <team>` works the same way for every project. |
 | **Supabase** [req] | Postgres + auth + storage | Free tier per project |
@@ -113,8 +113,7 @@ claude            # in any folder
 /doctor           # environment check; fix anything it flags
 ```
 
-- [ ] `/status` shows the model from `settings.json` (`fable[1m]`). If the account
-      cannot use Fable, edit `~/.claude/settings.json` and set `"model": "opus[1m]"`.
+- [ ] `/status` shows the model from `settings.json` (`opus`, Opus 5.5).
 - [ ] Ask in the session: **"what skills do you have?"** and confirm the list is long
       (40 or so). Ask **"what agents can you use?"** and confirm `premium-ui`,
       `security-review`, `supabase-migrator`, `silent-failure-hunter`, `vercel-ship`.
