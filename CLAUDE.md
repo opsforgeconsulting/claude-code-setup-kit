@@ -131,8 +131,22 @@ Never output basic Tailwind starter UI. Never use plain boxes on flat background
 
 Run this pipeline for any premium build or redesign:
 ```
-ui-ux-pro-max -> build -> motion-design -> verify with playwright
+21st-ui-build -> ui-ux-pro-max -> build -> motion-design -> verify with playwright
 ```
+
+### Site Standard (every website, landing page, marketing site)
+
+Any site build, remake or redesign goes through the **`premium-site` skill**. Load it before writing
+a UI file. A `UserPromptSubmit` hook (`site_standard_hook.js`) injects the reminder when a prompt
+looks like a site build, so this does not depend on remembering. The gates, in order:
+
+1. **Brand and content from the client** - their colors, fonts, logo, and real copy pulled verbatim from the existing site. Never invented.
+2. **A scroll-driven intro** - default is a scroll-scrubbed film (their photos as first/last frames, generated frames only for gaps, slow image-to-video clips, an encode with a keyframe every 8 frames, eased `currentTime`). The template and encode script live in the skill's `references/`.
+3. **At least four real 21st.dev components**, ported and restyled with the project tokens; choices recorded in `.21st/design.json`. If the `21st` CLI returns 401, use the `mcp__21st__*` tools.
+4. **Pipeline**: `21st-ui-build` -> `ui-ux-pro-max` -> `motion-design`. Never hand a UI build to a subagent that skips it.
+5. **Verify live**: all routes 200, zero console errors, no horizontal scroll at 390/375, both themes screenshotted at desktop and phone width, the intro scrubs on both, demo deploys are `noindex`.
+
+Sibling sites for the same or related clients must differ in type family and surface, not just layout.
 
 ### Color Rule
 

@@ -128,6 +128,7 @@ $copies = @(
   'hooks/agent_model_guard.py',
   'hooks/context_monitor.js', 'hooks/harness_telemetry.js', 'hooks/learn_loop.js',
   'hooks/learn_prompt.md', 'hooks/recall_hook.js', 'hooks/candidates_notice.js',
+  'hooks/site_standard_hook.js',
   'recall/recall.mjs', 'recall/transcript-text.mjs',
   'agents/premium-ui.md', 'agents/security-review.md', 'agents/supabase-migrator.md',
   'agents/silent-failure-hunter.md', 'agents/vercel-ship.md',

@@ -14,7 +14,7 @@ keep their licenses intact.
 | playwright-skill | **mehmet-kozan** - github.com/sponsors/mehmet-kozan |
 | 21st-ai, 21st-cli-use, 21st-design-sync, 21st-registry, 21st-ui-build, 21st-ui-explore, 21st-ui-review | **21st.dev** |
 | ui-ux-pro-max, motion-design, web-design-guidelines, composition-patterns, react-best-practices, ast-grep | community skill sets |
-| loop-contract, skill-stocktake, recall | in-house (sanitized for sharing) |
+| loop-contract, skill-stocktake, recall, premium-site | in-house (sanitized for sharing) |
 
 The hooks `context_monitor.js`, `harness_telemetry.js`, and the `/learn-eval`
 command were ported and adapted from **affaan-m / ECC** (Everything Claude Code).

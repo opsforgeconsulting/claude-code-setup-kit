@@ -28,6 +28,11 @@
             "type": "command",
             "command": "node --no-warnings \"$HOME/.claude/hooks/recall_hook.js\"",
             "timeout": 15
+          },
+          {
+            "type": "command",
+            "command": "node \"$HOME/.claude/hooks/site_standard_hook.js\"",
+            "timeout": 5
           }
         ]
       }

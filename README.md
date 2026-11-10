@@ -31,6 +31,7 @@ claude-code-setup-kit/
 |   |-- context_monitor.js     <- PostToolUse: compact / context / scope / loop / stall warnings
 |   |-- harness_telemetry.js   <- PostToolUse (Skill|Agent): usage log for evidence-based stocktakes
 |   |-- recall_hook.js         <- UserPromptSubmit: injects dated recall hits on the first prompt
+|   |-- site_standard_hook.js  <- UserPromptSubmit: a site-build prompt gets a reminder to load the premium-site skill
 |   |-- learn_loop.js          <- Stop: spawns a headless run that writes ONE candidate lesson to quarantine
 |   |-- learn_prompt.md        <- the instructions that headless run follows
 |   |-- candidates_notice.js   <- SessionStart: "N candidate lessons awaiting review"
@@ -52,7 +53,7 @@ claude-code-setup-kit/
 |   |-- newapp.md              <- /newapp - scaffold a demo-mode-first Next.js app
 |   |-- learn-eval.md          <- /learn-eval - extract a lesson, quality-gate it, save it
 |   `-- review-candidates.md   <- /review-candidates - promote / absorb / drop quarantined lessons
-|-- skills/                    <- 38 skills, installed for you (zip build only)
+|-- skills/                    <- 39 skills, installed for you (zip build only)
 |-- memory/
 |   `-- MEMORY.md              <- empty memory index to grow into
 |-- ATTRIBUTION.md             <- who wrote the bundled skills + licenses
@@ -65,7 +66,7 @@ transferable craft kept. After bootstrap, type `/ship`, `/verify`, `/newapp`,
 `/learn-eval`, or `/review-candidates` in a session, and the agents are
 available to the Agent tool by name.
 
-**Skills are bundled** in the zip distribution (38 of them - engineering
+**Skills are bundled** in the zip distribution (39 of them - engineering
 discipline, UI/UX, 21st.dev, Obsidian, recall, tooling) and installed straight
 into `~/.claude/skills/` by the bootstrap. Most are third-party work: see
 `ATTRIBUTION.md` for authors and licenses. The git repo omits `skills/` on

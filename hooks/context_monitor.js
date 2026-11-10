@@ -145,7 +145,7 @@ function windowTokens(tokens, model) {
   // Some models run a 1M window with no [1m] marker anywhere (Fable 5.1, Opus 5.5).
   // Without this a session on them gets false CONTEXT CRITICAL warnings from ~140k
   // tokens and may stop work because of them. CC_CONTEXT_WINDOW_TOKENS still overrides.
-  if (typeof model === 'string' && /fable-5-1|opus-5-5/.test(model)) return LARGE_WINDOW;
+  if (typeof model === 'string' && /fable|mythos|opus-5-5/.test(model)) return LARGE_WINDOW;
   if (Number.isFinite(tokens) && tokens > STD_WINDOW) return LARGE_WINDOW;
   if (settingsHasLargeMarker()) return LARGE_WINDOW;
   return STD_WINDOW;

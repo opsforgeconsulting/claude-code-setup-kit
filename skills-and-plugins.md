@@ -2,7 +2,7 @@
 
 ## Skills - already bundled
 
-`bootstrap.ps1` installs **38 skills** into `~/.claude/skills/`. Nothing to clone,
+`bootstrap.ps1` installs **39 skills** into `~/.claude/skills/`. Nothing to clone,
 nothing to hunt down. After bootstrap, start a session and ask *"what skills do
 you have?"* to see them listed.
 
@@ -15,6 +15,7 @@ What you get, by group:
 | **Engineering discipline** | brainstorming - writing-plans - executing-plans - subagent-driven-development - test-driven-development - systematic-debugging - requesting-code-review - receiving-code-review - verification-before-completion - dispatching-parallel-agents - using-git-worktrees - finishing-a-development-branch - using-superpowers - writing-skills - loop-contract - skill-stocktake |
 | **Memory** | recall (search memory, journal, past sessions, your vaults - pairs with `hooks/recall_hook.js`) |
 | **UI / UX** | ui-ux-pro-max (styles, palettes, font pairings) - motion-design - ux-designer-skill - web-design-guidelines - mobile-app-ui-design - composition-patterns - react-best-practices |
+| **Site standard** | premium-site (the house standard for every website or landing page: client brand and content, a scroll-driven intro, real 21st.dev components, both themes, verified live - pairs with `hooks/site_standard_hook.js`) |
 | **21st.dev** | 21st-ui-build - 21st-ui-explore - 21st-ui-review - 21st-ai - 21st-cli-use - 21st-registry - 21st-design-sync |
 | **Obsidian / writing** | obsidian-markdown - obsidian-bases - obsidian-cli - json-canvas - defuddle (web -> clean markdown) |
 | **Tooling** | ast-grep (structural code search) - playwright-skill (browser automation) |
@@ -79,6 +80,7 @@ claude.ai -> Settings -> Connectors, not in this file. See SETUP-GUIDE.md.
 | `context_monitor.js` | PostToolUse (all) | Injects `[StrategicCompact]`, `[CONTEXT WARNING/CRITICAL]`, `[SCOPE WARNING]`, `[LOOP WARNING]`, `[STALL WARNING/CRITICAL]` when the session drifts. Never blocks. `CC_CONTEXT_MONITOR=off` disables. |
 | `harness_telemetry.js` | PostToolUse (Skill/Agent) | One JSONL line per skill/agent use into `memory/harness-log/`, so skill-stocktake can retire dead skills on evidence. |
 | `recall_hook.js` | UserPromptSubmit | On the first real prompt of a session, injects the top 6 recall hits (dated claims, not facts). `recall: <q>` re-triggers. `CC_RECALL=off` disables. |
+| `site_standard_hook.js` | UserPromptSubmit | When a prompt asks to build, remake or redesign a website or landing page, injects a reminder to load the `premium-site` skill before any UI file is written. Never blocks. `CC_SITE_STANDARD=off` disables. |
 | `learn_loop.js` | Stop | After a substantial session (25+ tool calls, max 6/day) spawns a headless Sonnet run that writes ONE candidate lesson to `memory/_candidates/`. Nothing goes live without `/review-candidates`. `CC_LEARN=off` disables. |
 | `candidates_notice.js` | SessionStart | Reminds you when candidates are waiting. |
 | `precompact_backup.py` | PreCompact | Snapshots the transcript into `memory/session-logs/` (which recall indexes). |
