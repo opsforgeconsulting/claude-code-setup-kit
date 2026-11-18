@@ -118,7 +118,7 @@ if (-not $SkipTools) {
 
 # ---------------------------------------------------------------------------
 Step "Config -> $ClaudeDir"
-$dirs = @('hooks', 'agents', 'commands', 'recall', 'memory') | ForEach-Object { Join-Path $ClaudeDir $_ }
+$dirs = @('hooks', 'agents', 'commands', 'recall', 'memory', 'analytics') | ForEach-Object { Join-Path $ClaudeDir $_ }
 if (-not $WhatIf) { New-Item -ItemType Directory -Force -Path (@($ClaudeDir) + $dirs) | Out-Null }
 
 $stamp = '{0:yyyyMMdd-HHmmss}' -f (Get-Date)
@@ -132,6 +132,9 @@ $copies = @(
   'recall/recall.mjs', 'recall/transcript-text.mjs',
   'agents/premium-ui.md', 'agents/security-review.md', 'agents/supabase-migrator.md',
   'agents/silent-failure-hunter.md', 'agents/vercel-ship.md',
+  'agents/supabase-security-auditor.md', 'agents/product-analytics.md',
+  'agents/cost-quota-sentinel.md', 'agents/client-handoff.md',
+  'analytics/supa.mjs',
   'commands/ship.md', 'commands/verify.md', 'commands/newapp.md',
   'commands/learn-eval.md', 'commands/review-candidates.md',
   'memory/MEMORY.md'

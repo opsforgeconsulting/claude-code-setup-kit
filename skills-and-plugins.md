@@ -2,7 +2,7 @@
 
 ## Skills - already bundled
 
-`bootstrap.ps1` installs **39 skills** into `~/.claude/skills/`. Nothing to clone,
+`bootstrap.ps1` installs **42 skills** into `~/.claude/skills/`. Nothing to clone,
 nothing to hunt down. After bootstrap, start a session and ask *"what skills do
 you have?"* to see them listed.
 
@@ -16,6 +16,7 @@ What you get, by group:
 | **Memory** | recall (search memory, journal, past sessions, your vaults - pairs with `hooks/recall_hook.js`) |
 | **UI / UX** | ui-ux-pro-max (styles, palettes, font pairings) - motion-design - ux-designer-skill - web-design-guidelines - mobile-app-ui-design - composition-patterns - react-best-practices |
 | **Site standard** | premium-site (the house standard for every website or landing page: client brand and content, a scroll-driven intro, real 21st.dev components, both themes, verified live - pairs with `hooks/site_standard_hook.js`) |
+| **Ship & operate** | doc-production (print-ready PDF/Word with a page-overflow check) - fleet-upgrade (safe dependency/security bumps across many repos) - lead-compliance (TCPA / CAN-SPAM / ToS / mortgage + insurance marketing verdicts) |
 | **21st.dev** | 21st-ui-build - 21st-ui-explore - 21st-ui-review - 21st-ai - 21st-cli-use - 21st-registry - 21st-design-sync |
 | **Obsidian / writing** | obsidian-markdown - obsidian-bases - obsidian-cli - json-canvas - defuddle (web -> clean markdown) |
 | **Tooling** | ast-grep (structural code search) - playwright-skill (browser automation) |

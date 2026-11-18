@@ -46,14 +46,20 @@ claude-code-setup-kit/
 |   |-- vercel-ship.md         <- build -> verify -> deploy -> verify live
 |   |-- security-review.md     <- adversarial pre-ship security + compliance gate
 |   |-- supabase-migrator.md   <- safe Drizzle + Supabase Postgres migrations (knows the MySQL->PG traps)
-|   `-- silent-failure-hunter.md <- finds swallowed errors and fallbacks that hide real breakage
+|   |-- silent-failure-hunter.md <- finds swallowed errors and fallbacks that hide real breakage
+|   |-- supabase-security-auditor.md <- live read-only audit: what the public anon key can read/write
+|   |-- product-analytics.md   <- honest usage numbers from the live DB (row cap + sign-in traps baked in)
+|   |-- cost-quota-sentinel.md <- what runs out next (AI credit, email quota, storage, disk) and when
+|   `-- client-handoff.md      <- inventory, scrub, billing cut-over and click-list for handing an app over
+|-- analytics/
+|   `-- supa.mjs               <- read-only Supabase helper used by product-analytics
 |-- commands/
 |   |-- ship.md                <- /ship  - build, verify, deploy with a live-verify loop
 |   |-- verify.md              <- /verify - prove a change works end-to-end without deploying
 |   |-- newapp.md              <- /newapp - scaffold a demo-mode-first Next.js app
 |   |-- learn-eval.md          <- /learn-eval - extract a lesson, quality-gate it, save it
 |   `-- review-candidates.md   <- /review-candidates - promote / absorb / drop quarantined lessons
-|-- skills/                    <- 39 skills, installed for you (zip build only)
+|-- skills/                    <- 42 skills, installed for you (zip build only)
 |-- memory/
 |   `-- MEMORY.md              <- empty memory index to grow into
 |-- ATTRIBUTION.md             <- who wrote the bundled skills + licenses
@@ -66,7 +72,7 @@ transferable craft kept. After bootstrap, type `/ship`, `/verify`, `/newapp`,
 `/learn-eval`, or `/review-candidates` in a session, and the agents are
 available to the Agent tool by name.
 
-**Skills are bundled** in the zip distribution (39 of them - engineering
+**Skills are bundled** in the zip distribution (42 of them - engineering
 discipline, UI/UX, 21st.dev, Obsidian, recall, tooling) and installed straight
 into `~/.claude/skills/` by the bootstrap. Most are third-party work: see
 `ATTRIBUTION.md` for authors and licenses. The git repo omits `skills/` on
